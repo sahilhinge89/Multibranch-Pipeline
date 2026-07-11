@@ -20,12 +20,7 @@ pipeline {
 
     
 
-        stage('Cleanup') {
-            steps {
-                sh 'docker rm -f my-app-test || true'
-            }
-        }
-    }
+        
 
     post {
         always {
