@@ -13,13 +13,7 @@ pipeline {
         }
 
 
-        stage('Cleanup') {
-            steps {
-                sh 'docker rm -f my-app-test || true'
-            }
-        }
-    }
-
+      
     post {
         always {
             echo "Pipeline finished for branch: ${env.BRANCH_NAME}"
