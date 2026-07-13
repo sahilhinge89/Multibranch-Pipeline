@@ -2,6 +2,8 @@
 
 A hands-on Jenkins Multibranch Pipeline project. Jenkins automatically discovers every branch in this repository, and each branch with a `Jenkinsfile` gets its own independent CI pipeline that builds a Docker image for the app.
 
+![GitHub repository overview](screenshots/github-repo-readme.png)
+
 ## Project structure
 
 ```
@@ -29,6 +31,8 @@ Defined in `Jenkinsfile`, run automatically per branch:
 
 1. **Checkout** — pulls the branch's code via `checkout scm`
 2. **Build Docker Image** — runs `docker build -t my-app:<branch-name> .`
+
+![Jenkinsfile viewed on GitHub](screenshots/jenkinsfile-github.png)
 
 ```groovy
 pipeline {
@@ -111,6 +115,10 @@ docker restart jenkins
 > docker restart jenkins
 > ```
 
+Once it's running, confirm Jenkins is reachable at `http://localhost:8080`:
+
+![Jenkins dashboard](screenshots/jenkins-dashboard.png)
+
 ### 3. Install required Jenkins plugins
 
 - Git plugin
@@ -126,21 +134,30 @@ to 5,000 requests/hour.
 
 1. GitHub → **Settings → Developer settings → Personal access tokens (classic)**
 2. Generate a token with the **repo** scope
+
+   ![GitHub personal access token scopes](screenshots/github-pat-token.png)
+
 3. Jenkins → **Manage Jenkins → Credentials → (global) → Add Credentials**
-   - Kind: `Username with password`
-   - Username: your GitHub username
-   - Password: the generated token
-   - ID: `github-token-userpass`
+   - Kind: `Secret text` (or `Username with password` if your GitHub source requires it)
+   - Secret / Password: the generated token
+   - ID: `github-token`
+
+   ![Add Secret text credential in Jenkins](screenshots/add-secret-text.png)
 
 ### 5. Create the Multibranch Pipeline job
 
 1. Jenkins dashboard → **New Item** → name it → select **Multibranch Pipeline**
+
+   ![Creating a new Multibranch Pipeline item](screenshots/new-item-multibranch.png)
+
 2. **Branch Sources → Add source → GitHub** (or Git)
    - Repository URL: your repo's HTTPS URL
    - Credentials: select the credential created above
 3. **Build Configuration → Script Path**: `Jenkinsfile`
 4. **Scan Multibranch Pipeline Triggers**: enable periodic scanning (e.g. every 1 minute) for local testing
 5. Save
+
+   ![Branch Sources configuration with credentials attached](screenshots/branch-sources-config.png)
 
 Jenkins scans the repo, finds every branch containing a `Jenkinsfile`, and creates a pipeline job for each one automatically.
 
@@ -154,6 +171,10 @@ git push -u origin dev
 ```
 
 Trigger a rescan in Jenkins (or wait for the periodic scan) — a new job appears for `dev` with its own independent build history.
+
+A successful build shows a green Stage View, with each stage timed individually:
+
+![Successful main branch build with stage view](screenshots/main-branch-build-success.png)
 
 ## Known issues / things to revisit
 
