@@ -17,14 +17,6 @@ pipeline {
                 sh 'docker build -t $IMAGE_NAME .'
             }
         }
-
-    
-
-        stage('Cleanup') {
-            steps {
-                sh 'docker rm -f my-app-test || true'
-            }
-        }
     }
 
     post {
