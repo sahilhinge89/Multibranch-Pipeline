@@ -17,7 +17,14 @@ pipeline {
                 sh 'docker build -t $IMAGE_NAME .'
             }
         }
+<<<<<<< HEAD
     }
+=======
+
+    
+
+        
+>>>>>>> 3b03adcbeb3bfc05de2c1bd9f68bca7f468d0613
 
     post {
         always {
